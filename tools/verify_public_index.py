@@ -24,9 +24,13 @@ def main():
     for source in sources:
         url = (source.text or '').strip()
         parsed = urlsplit(url)
-        assert parsed.scheme == 'https' and parsed.hostname == 'raw.githubusercontent.com'
+        assert parsed.scheme == 'https'
+        assert parsed.hostname in ('raw.githubusercontent.com', 'github.com')
         parts = unquote(parsed.path).split('/')
         assert parts[1:3] == ['futurewy', 'WXY-REAPER-Scripts']
+        if parsed.hostname == 'github.com':
+            assert parts[3] == 'raw'
+            parts.pop(3)
         revision = parts[3]
         assert len(revision) == 40 and all(c in '0123456789abcdef' for c in revision)
         relative = Path(*parts[4:])
