@@ -38,6 +38,7 @@ assert(refresh==0 and undo==0 and errors==0)
 ''')
 run(TRACK, TRACK_SETUP + "reaper.TrackFX_SetOffline=function() error('injected') end",
     'assert(refresh==0 and undo==0 and errors==1)')
+run(TRACK, TRACK_SETUP + 'tracks={}', 'assert(refresh==0 and undo==0 and errors==0)')
 MOVE = 'Items/Move_Items_Markers_Regions_In_TimeSelection-移动所有.lua'
 MOVE_SETUP = r'''
 start=10; finish=20; accepted=true; input='-1'; refresh=0; undo=0; errors=0
