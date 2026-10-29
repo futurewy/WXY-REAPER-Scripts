@@ -51,3 +51,5 @@ jobs:
             git commit -m "Update ReaPack index"
             git push
           fi
+      - name: Verify public index and all package downloads
+        run: python3 tools/verify_public_index.py
