@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="WXY REAPER Scripts" commit="0600d27bd2452ff69d3a855e74f2a03cc49c3391">
+<index version="1" name="WXY REAPER Scripts" commit="8ef04249e89aefb60575d21998d2d10dd2d1402b">
   <category name="Items">
     <reapack name="Move_Items_Markers_Regions_In_TimeSelection-移动所有.lua" type="script" desc="Move arrangement by bars from time selection start">
       <metadata>
@@ -70,6 +70,21 @@ No runtime behavior changes.]]></changelog>
     </reapack>
   </category>
   <category name="Tracks">
+    <reapack name="futurewy_Toggle instrument windows.lua" type="script" desc="Toggle instrument windows for selected tracks (parent and send lookup)">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Independent implementation using native REAPER APIs; no SWS required. Finds the first instrument on each selected track, then its nearest parent, then searches send destinations breadth-first (including their parents). Send traversal handles cycles. Shared instruments are processed once. If any resolved window is closed, show all; otherwise close all. This changes floating windows only, not FX bypass, offline state or routing.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="futurewy" time="2026-10-29T02:55:35Z">
+        <changelog><![CDATA[Initial independent implementation with native routing lookup and deduplication.]]></changelog>
+        <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/8ef04249e89aefb60575d21998d2d10dd2d1402b/Tracks/futurewy_Toggle%20instrument%20windows.lua</source>
+      </version>
+    </reapack>
     <reapack name="hide offlinefx track.lua" type="script" desc="Show selected tracks' FX and hide unselected fully offline FX tracks">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
@@ -88,6 +103,21 @@ Always restore UI refresh and close the undo block after errors.]]></changelog>
     </reapack>
   </category>
   <category name="Utility">
+    <reapack name="futurewy_BPM Calculator.lua" type="script" desc="BPM Calculator - independent beats/duration conversion and tap tempo">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Independent native REAPER gfx calculator. No FX, SWS, ReaImGui or other dependencies. Beats are quarter-note beats (4 beats = one 4/4 bar); duration is in seconds. Convert beats + seconds to BPM, or beats + BPM to seconds. Tap with the mouse or Space. Tap intervals below 0.10 seconds are ignored; a gap over 3 seconds starts a new sequence. Average the latest 16 intervals. Space uses physical key-down edges to avoid keyboard auto-repeat taps. This utility never changes project tempo, transport, selection or media.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="futurewy" time="2026-10-29T02:55:35Z">
+        <changelog><![CDATA[v1.0: Initial independent native gfx calculator and tap-tempo implementation.]]></changelog>
+        <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/8ef04249e89aefb60575d21998d2d10dd2d1402b/Utility/futurewy_BPM%20Calculator.lua</source>
+      </version>
+    </reapack>
     <reapack name="URL_Bookmarks_Manager.lua" type="script" desc="URL Bookmarks Menu (safe URL launching and corrected menu mapping)">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
