@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 lua = LuaRuntime(unpack_returned_tuples=True)
 compile_lua = lua.eval('function(s, name) local f,e=load(s,name,"t"); return f~=nil,e end')
 scripts = [p for folder in ('Items', 'Tracks', 'MIDI', 'Utility') for p in (ROOT / folder).glob('*.lua')]
-assert len(scripts) == 8, f'Expected eight publishable scripts, found {len(scripts)}'
+assert len(scripts) == 9, f'Expected nine publishable scripts, found {len(scripts)}'
 for path in scripts:
     text = path.read_text(encoding='utf-8-sig')
     ok, error = compile_lua(text, '@' + path.name)
