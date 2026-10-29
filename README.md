@@ -21,6 +21,8 @@ https://raw.githubusercontent.com/futurewy/WXY-REAPER-Scripts/main/index.xml
 
 | 脚本 | 版本 | 功能与限制 |
 | --- | --- | --- |
+| futurewy_BPM Calculator | 1.0 | 独立 BPM 计算器，拍数/时长换算与点击打拍；原生 gfx，无 FX、SWS 或 ReaImGui 依赖，不自动改变工程速度。 |
+| futurewy_Toggle instrument windows | 1.0 | 切换选中轨道对应乐器的浮动窗口；查找本轨、父轨和发送目标，共享乐器去重，路由循环安全；无 SWS 依赖。 |
 | hide offlinefx track | 1.1 | 选中且有 FX 的轨道恢复在线并显示；隐藏未选中且全部 FX 离线的轨道。 |
 | Move arrangement | 2.5 | 从时间选区起点移动 Items、Markers、Regions；一小节固定按 4 个四分音符换算，不移动自动化或速度标记。 |
 | ChordProgressionGenerator | 0.7 | 生成和试听经过和弦；需要 ReaImGui，打开和弦网页可选 SWS。试听需轨道监听和虚拟 MIDI 键盘输入。 |
@@ -33,7 +35,7 @@ https://raw.githubusercontent.com/futurewy/WXY-REAPER-Scripts/main/index.xml
 ## 安全试用
 
 这批版本经过 Lua 5.3 语法检查及模拟 REAPER API 回归测试，**不等于已在真实 REAPER 中完成兼容性认证**。请在工程副本中逐项验证，参见 [人工测试清单](TESTING.md)。
-本次未分发两个含第三方版权署名的脚本，未改动本地原始脚本。
+未分发或改动两个含第三方版权署名的原始脚本。新增的 futurewy_BPM Calculator 和 futurewy_Toggle instrument windows 是按功能需求独立实现的新脚本，非原文件的改名版本。BPM 新版不再调用原来的同名 FX；两个新版不会自动替换原脚本快捷键或工具栏绑定，请安装后重新绑定。
 
 ## 发布更新
 

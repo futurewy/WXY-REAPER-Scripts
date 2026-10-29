@@ -18,9 +18,9 @@ def main():
     root = ET.fromstring(document)
     assert root.tag == 'index' and root.get('version') == '1'
     packages = root.findall('.//reapack')
-    assert len(packages) == 6, f'Expected 6 packages, got {len(packages)}'
+    assert len(packages) == 8, f'Expected 8 packages, got {len(packages)}'
     sources = root.findall('.//source')
-    assert len(sources) == 6, f'Expected 6 source files, got {len(sources)}'
+    assert len(sources) == 8, f'Expected 8 source files, got {len(sources)}'
     for source in sources:
         url = (source.text or '').strip()
         parsed = urlsplit(url)
@@ -39,7 +39,7 @@ def main():
         local = (ROOT / relative).read_bytes()
         assert remote.replace(b'\r\n', b'\n') == local.replace(b'\r\n', b'\n'), str(relative)
         print(f'PASS public download: {relative} SHA256={hashlib.sha256(remote).hexdigest()}')
-    print('PASS: public XML parsed, 6 immutable source URLs downloaded and matched reviewed copies.')
+    print('PASS: public XML parsed, 8 immutable source URLs downloaded and matched reviewed copies.')
 
 if __name__ == '__main__':
     main()
