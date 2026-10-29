@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="WXY REAPER Scripts" commit="8ef04249e89aefb60575d21998d2d10dd2d1402b">
+<index version="1" name="WXY REAPER Scripts" commit="d6ffc5725206bfe919abf66f5dbea1adbf85968c">
   <category name="Items">
     <reapack name="Move_Items_Markers_Regions_In_TimeSelection-移动所有.lua" type="script" desc="Move arrangement by bars from time selection start">
       <metadata>
@@ -116,6 +116,23 @@ Always restore UI refresh and close the undo block after errors.]]></changelog>
       <version name="1.0" author="futurewy" time="2026-10-29T02:55:35Z">
         <changelog><![CDATA[v1.0: Initial independent native gfx calculator and tap-tempo implementation.]]></changelog>
         <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/8ef04249e89aefb60575d21998d2d10dd2d1402b/Utility/futurewy_BPM%20Calculator.lua</source>
+      </version>
+    </reapack>
+    <reapack name="ProjectNotes_ZoomReader.lua" type="script" desc="工程备注歌词：单Lua选字复制、连续编辑、Region跟随">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Requires REAPER with ReaImGui 0.10+ (install/update via ReaPack). Reading mode already centers each visual line and uses an opaque black background with white text; selection, copying and Region follow are preserved. FangSong is optional; portable sans-serif fallback may lack CJK glyph coverage. Edits update project notes, not the project file: save the project in REAPER. Backups/recovery use hex-encoded persistent ExtState (not encrypted). Recovery copies drafts to the clipboard; legacy recovery remains readable.\par}
+}
+]]></description>
+      </metadata>
+      <version name="5.1.2" author="futurewy" time="2026-10-29T09:05:14Z">
+        <changelog><![CDATA[v5.1.2: Guard optional font loading; verify note writes before marking synced;
+preserve multiline backup/recovery data using single-line hex ExtState.
+Existing centered, opaque high-contrast reader and follow behavior unchanged.]]></changelog>
+        <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/d6ffc5725206bfe919abf66f5dbea1adbf85968c/Utility/ProjectNotes_ZoomReader.lua</source>
       </version>
     </reapack>
     <reapack name="URL_Bookmarks_Manager.lua" type="script" desc="URL Bookmarks Menu (safe URL launching and corrected menu mapping)">
