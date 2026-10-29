@@ -22,6 +22,7 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
+      - run: sudo apt-get update && sudo apt-get install -y pandoc
       - run: gem install reapack-index --no-document
       - run: reapack-index --check
   publish:
@@ -37,9 +38,10 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
+      - run: sudo apt-get update && sudo apt-get install -y pandoc
       - run: gem install reapack-index --no-document
       - name: Generate index from committed versions
-        run: reapack-index --no-commit
+        run: reapack-index --no-commit --name "WXY REAPER Scripts"
       - name: Commit updated index
         run: |
           git config user.name "github-actions[bot]"
