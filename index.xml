@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<index version="1" name="WXY REAPER Scripts" commit="0600d27bd2452ff69d3a855e74f2a03cc49c3391">
+  <category name="Items">
+    <reapack name="Move_Items_Markers_Regions_In_TimeSelection-移动所有.lua" type="script" desc="Move arrangement by bars from time selection start">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Moves items, markers and regions starting at or after the time selection start. One bar is intentionally four quarter notes (4/4), as in the original script. Automation and tempo markers are not moved. Back up your project first.\par}
+}
+]]></description>
+      </metadata>
+      <version name="2.5" author="futurewy" time="2026-10-29T02:03:55Z">
+        <changelog><![CDATA[Snapshot markers before moving to avoid index reordering and preserve colors.
+Validate input before undo; reject negative target positions; restore UI on errors.]]></changelog>
+        <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/0600d27bd2452ff69d3a855e74f2a03cc49c3391/Items/Move_Items_Markers_Regions_In_TimeSelection-%E7%A7%BB%E5%8A%A8%E6%89%80%E6%9C%89.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="MIDI">
+    <reapack name="ChordProgressionGenerator.lua" type="script" desc="Generate and audition passing-chord progressions (Arnie Berle harmony engine)">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Generate passing chords between start and target chords, with automatic, ascending-step and descending-cycle modes, voicing previews and pagination. Requires REAPER with Lua ReaScript support and the ReaImGui extension (available through ReaPack). SWS is optional, for opening chord-reference URLs. Audition uses the virtual MIDI keyboard queue: enable track monitoring and select All MIDI inputs or Virtual MIDI keyboard as the track input.\par}
+}
+]]></description>
+      </metadata>
+      <version name="0.7" author="futurewy" time="2026-10-29T02:03:55Z">
+        <changelog><![CDATA[v0.7: Guard missing ReaImGui APIs before creating the GUI.
+Reject trailing characters in slash-bass note names.
+Encode sharp quality symbols in chord-reference URL path segments.
+Release audition notes at their scheduled off time between queued chords.]]></changelog>
+        <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/0600d27bd2452ff69d3a855e74f2a03cc49c3391/MIDI/ChordProgressionGenerator.lua</source>
+      </version>
+    </reapack>
+    <reapack name="MIDI Notation Sanitizer-MIDI记谱清洗器.lua" type="script" desc="MIDI Notation Sanitizer - MIDI记谱清洗器">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Quantize selected MIDI items for notation using the native gfx options panel. Supports polyphonic/monophonic cleanup and optional copies on new tracks. Normalizes retained velocities to 100; removes CC-class events except pitch bend. Text, lyrics and SysEx are preserved. No extensions required.\par}
+}
+]]></description>
+      </metadata>
+      <version name="2.2.1" author="futurewy" time="2026-10-29T02:03:55Z">
+        <changelog><![CDATA[Abort on failed note reads before cleanup; reliably write fractional-PPQ rounding.]]></changelog>
+        <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/0600d27bd2452ff69d3a855e74f2a03cc49c3391/MIDI/MIDI%20Notation%20Sanitizer-MIDI%E8%AE%B0%E8%B0%B1%E6%B8%85%E6%B4%97%E5%99%A8.lua</source>
+      </version>
+    </reapack>
+    <reapack name="RevoiceSelectedChord-和弦替换.lua" type="script" desc="选中和弦就近替换（含分解和弦与外音）">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Revoice selected notes independently in each editable MIDI-editor take. Native gfx chord panel, external-note strategies and collision-safe additions. REAPER 6/7, Lua 5.3+. No SWS/ReaPack dependencies.\par}
+}
+]]></description>
+      </metadata>
+      <version name="4.0.1" author="futurewy" time="2026-10-29T02:03:55Z">
+        <changelog><![CDATA[Standardize package metadata.
+No runtime behavior changes.]]></changelog>
+        <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/0600d27bd2452ff69d3a855e74f2a03cc49c3391/MIDI/RevoiceSelectedChord-%E5%92%8C%E5%BC%A6%E6%9B%BF%E6%8D%A2.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Tracks">
+    <reapack name="hide offlinefx track.lua" type="script" desc="Show selected tracks' FX and hide unselected fully offline FX tracks">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Selected tracks with FX are shown in both TCP and mixer, with FX online. Unselected tracks with all FX offline are hidden. Tracks without FX are unchanged.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.1" author="futurewy" time="2026-10-29T02:03:55Z">
+        <changelog><![CDATA[Use a Lua boolean for the offline flag; show partially hidden selected tracks.
+Always restore UI refresh and close the undo block after errors.]]></changelog>
+        <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/0600d27bd2452ff69d3a855e74f2a03cc49c3391/Tracks/hide%20offlinefx%20track.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Utility">
+    <reapack name="URL_Bookmarks_Manager.lua" type="script" desc="URL Bookmarks Menu (safe URL launching and corrected menu mapping)">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Manage persistent URL bookmarks from a mouse-position popup menu. Supports opening, adding, renaming, editing URLs, deleting, and reordering. Opening requires SWS CF_ShellExecute; only HTTP(S) and file URLs are allowed. File URLs use the system handler and must only point to trusted files.\par}
+}
+]]></description>
+      </metadata>
+      <version name="2.1" author="futurewy" time="2026-10-29T02:03:55Z">
+        <changelog><![CDATA[Remove shell-based URL fallback; require SWS CF_ShellExecute and validate schemes.
+Fix submenu endings and command mapping; sanitize display labels.
+Validate line-based storage and split records at the first delimiter.]]></changelog>
+        <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/0600d27bd2452ff69d3a855e74f2a03cc49c3391/Utility/URL_Bookmarks_Manager.lua</source>
+      </version>
+    </reapack>
+  </category>
+</index>
