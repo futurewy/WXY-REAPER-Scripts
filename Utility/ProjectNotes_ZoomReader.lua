@@ -1,5 +1,5 @@
 -- @description 工程备注歌词：单Lua选字复制、连续编辑、Region跟随
--- @version 5.1.2
+-- @version 5.2.0
 -- @author futurewy
 -- @about
 --   Requires REAPER with ReaImGui 0.10+ (install/update via ReaPack).
@@ -9,7 +9,13 @@
 --   Edits update project notes, not the project file: save the project in REAPER.
 --   Backups/recovery use hex-encoded persistent ExtState (not encrypted).
 --   Recovery copies drafts to the clipboard; legacy recovery remains readable.
+--   Korean and Tibetan glyphs use optional extra fonts, selected per character;
+--   missing font files fall back to the base font.
 -- @changelog
+--   v5.2.0: Draw per-character font runs so Korean and Tibetan text renders with
+--   a font that carries the glyphs; never wrap before a Tibetan combining mark.
+--   Keep the optional-font guards, hex backup/recovery and write verification
+--   from v5.1.2.
 --   v5.1.2: Guard optional font loading; verify note writes before marking synced;
 --   preserve multiline backup/recovery data using single-line hex ExtState.
 --   Existing centered, opaque high-contrast reader and follow behavior unchanged.
@@ -43,6 +49,21 @@ if not uiFont then
 end
 local font = attachedFont(function() return I.CreateFontFromFile('C:/Windows/Fonts/simfang.ttf') end)
   or uiFont
+-- Extra fonts for scripts missing from the base font (Korean / Tibetan).
+-- Optional: a missing file falls back to the base font, so the script still
+-- runs unchanged on machines without those fonts.
+local function loadFont(path, fallback)
+  local ok, value = pcall(function()
+    if not R.file_exists(path) then return nil end
+    local candidate = I.CreateFontFromFile(path)
+    if not candidate then return nil end
+    I.Attach(ctx, candidate)
+    return candidate
+  end)
+  return (ok and value) or fallback
+end
+local fontKO = loadFont('C:/Windows/Fonts/malgun.ttf', font)   -- Korean
+local fontBO = loadFont('C:/Windows/Fonts/himalaya.ttf', font) -- Tibetan
 local caretCallback=I.CreateFunctionFromEEL([[
   restore >= 0 ? (
     CursorPos = restore;
@@ -58,6 +79,49 @@ I.Attach(ctx,caretCallback)
 I.Function_SetValue(caretCallback,'restore',-1)
 local function clamp(n,a,b) return math.max(a,math.min(b,n)) end
 local size = clamp(tonumber(R.GetExtState(SECTION,'size')) or 28,12,96)
+
+-- Per-script font runs: a line is split into runs, each drawn with a font
+-- that actually carries the glyphs.
+local function fontFor(ch)
+  if #ch<2 then return nil end              -- ASCII follows the previous run's font
+  local ok,cp=pcall(utf8.codepoint,ch)
+  if not ok then return nil end
+  if cp>=0x0F00 and cp<=0x0FFF then return fontBO end
+  if (cp>=0x1100 and cp<=0x11FF) or (cp>=0x3130 and cp<=0x318F)
+     or (cp>=0xA960 and cp<=0xA97F) or (cp>=0xAC00 and cp<=0xD7FF) then return fontKO end
+  return font
+end
+local function isMark(ch)                     -- Tibetan combining marks: never wrap before them
+  if #ch<2 then return false end
+  local ok,cp=pcall(utf8.codepoint,ch)
+  return ok and ((cp>=0x0F71 and cp<=0x0F84) or (cp>=0x0F8D and cp<=0x0FBC))
+end
+local function runsOf(s)
+  local runs,cur,buf={},font,{}
+  for ch in s:gmatch('[%z\1-\127\194-\244][\128-\191]*') do
+    local f=fontFor(ch) or cur
+    if f~=cur and #buf>0 then runs[#runs+1]={cur,table.concat(buf)}; buf={} end
+    cur=f; buf[#buf+1]=ch
+  end
+  if #buf>0 then runs[#runs+1]={cur,table.concat(buf)} end
+  return runs
+end
+local function textWidth(s)
+  if s=='' then return 0 end
+  local w=0
+  for _,r in ipairs(runsOf(s)) do
+    I.PushFont(ctx,r[1],size); w=w+I.CalcTextSize(ctx,r[2]); I.PopFont(ctx)
+  end
+  return w
+end
+local function drawText(s)
+  local first=true
+  for _,r in ipairs(runsOf(s)) do
+    if not first then I.SameLine(ctx,0,0) end
+    first=false
+    I.PushFont(ctx,r[1],size); I.Text(ctx,r[2]); I.PopFont(ctx)
+  end
+end
 local states, current, editing, active = {}, nil, false, false
 local function zoom(delta)
   size=clamp(size+delta,12,96)
@@ -262,9 +326,10 @@ local function buildLayout(text,width,regions)
   local visual={}
   local function wrap(text,tag,header,sourceStart)
     local line,offset,continuation='',0,false
-    local function add() visual[#visual+1]={text=line,width=I.CalcTextSize(ctx,line),tag=tag,header=header,softWrap=continuation,sourceStart=sourceStart and sourceStart+offset};offset=offset+#line;continuation=true end
+    local function add() visual[#visual+1]={text=line,width=textWidth(line),tag=tag,header=header,softWrap=continuation,sourceStart=sourceStart and sourceStart+offset};offset=offset+#line;continuation=true end
     for ch in text:gmatch('[%z\1-\127\194-\244][\128-\191]*') do
-      if line~='' and I.CalcTextSize(ctx,line..ch)>width then add(); line=ch else line=line..ch end
+      -- Never break before a combining mark: it belongs to the previous glyph.
+      if line~='' and not isMark(ch) and textWidth(line..ch)>width then add(); line=ch else line=line..ch end
     end
     add()
   end
@@ -335,7 +400,7 @@ local function readerHit(lines,geo,mx,my,strict)
   if line.readerText~=line.text or line.readerSize~=size then
     line.readerText,line.readerSize=line.text,size
     line.readerBounds=readerBounds(line.text); line.readerWidths={0}
-    for n=2,#line.readerBounds do line.readerWidths[n]=I.CalcTextSize(ctx,line.text:sub(1,line.readerBounds[n])) end
+    for n=2,#line.readerBounds do line.readerWidths[n]=textWidth(line.text:sub(1,line.readerBounds[n])) end
   end
   for n=2,#line.readerBounds do
     if mx-g.x<(line.readerWidths[n-1]+line.readerWidths[n])/2 then return {line=row,byte=line.readerBounds[n-1]} end
@@ -490,14 +555,14 @@ local function centeredLyrics(p,text,regions)
     -- Highlight is submitted BEFORE Text, behind glyphs rather than over them.
     if a and n>=a.line and n<=b.line then
       local first,last=n==a.line and a.byte or 0,n==b.line and b.byte or #line.text
-      local x1=g.x+I.CalcTextSize(ctx,line.text:sub(1,first))
-      local x2=g.x+I.CalcTextSize(ctx,line.text:sub(1,last))
+      local x1=g.x+textWidth(line.text:sub(1,first))
+      local x2=g.x+textWidth(line.text:sub(1,last))
       if n<b.line and not lines[n+1].softWrap then x2=x2+math.max(4,height*0.22) end
       if x2>x1 then I.DrawList_AddRectFilled(draw,x1,g.y,x2,g.y+height,0x397AC699) end
     end
     if line.text=='' then I.Dummy(ctx,0,height)
     else
-      I.Text(ctx,line.text)
+      drawText(line.text)
       if exact and exact.line==n and line.header then I.SetTooltip(ctx,'单击跳转到 Region 起点；拖动选择；双击选词') end
       if not line.header and matches(line.tag,region) then
         local x1,y1=I.GetItemRectMin(ctx)

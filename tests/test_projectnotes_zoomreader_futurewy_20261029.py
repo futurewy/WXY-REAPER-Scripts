@@ -13,7 +13,9 @@ return {save=save,getstate=getstate,encode=encode,decode=decode,rowsOf=rowsOf,
   buildLayout=buildLayout,layout=function() return layout end,
   readerCopy=readerCopy,readerBounds=readerBounds,readerWord=readerWord,
   selection=readerSelection,currentRegion=currentRegion,matches=matches,
-  font=font,uiFont=uiFont,loop=loop}
+  font=font,uiFont=uiFont,loop=loop,
+  fontKO=fontKO,fontBO=fontBO,fontFor=fontFor,isMark=isMark,
+  runsOf=runsOf,textWidth=textWidth,drawText=drawText}
 """
 
 
@@ -25,11 +27,13 @@ def fixture(font_failure=False, family_failure=False, all_fonts_fail=False):
 notes, ext, writes, dirty, begins, ends, messages = 'original', {}, 0, 0, 0, 0, 0
 closed, write_failure, write_error = false, false, false
 playing, position, cursor = 0, 0, 0
+stack = {}
 I = {
  CreateContext=function() return {} end, SetConfigVar=function() end,
  CreateFontFromFile=function(path)
    if font_failure or all_fonts_fail then error('missing font') end
-   return 'file-font'
+   -- Distinct handle per file, mirroring real ImGui font objects.
+   return 'file-font:'..tostring(path)
  end,
  CreateFont=function(name)
    if all_fonts_fail or (family_failure and name=='Microsoft YaHei') then error('family unavailable') end
@@ -37,6 +41,8 @@ I = {
  end,
  Attach=function(ctx,object) assert(object) end,
  CreateFunctionFromEEL=function() return {} end, Function_SetValue=function() end,
+ PushFont=function(ctx,font,size) stack[#stack+1]=size or 28 end,
+ PopFont=function(ctx) stack[#stack]=nil end,
  CalcTextSize=function(ctx,text) return utf8.len(text)*10 end,
 }
 package.preload.imgui=function() return function(version) assert(version=='0.10'); return I end end
@@ -60,6 +66,7 @@ reaper = {
  MarkProjectDirty=function() dirty=dirty+1 end,
  atexit=function(fn) exitfn=fn end,
  GetProjectName=function() return 'Project' end,
+ file_exists=function(path) return type(path)=='string' and path~='' end,
  GetPlayStateEx=function() return playing end,
  GetPlayPositionEx=function() return position end,
  GetCursorPositionEx=function() return cursor end,
@@ -76,11 +83,14 @@ class ProjectNotesZoomReaderRegression(unittest.TestCase):
         lua, _, _ = fixture()
         lua.execute("assert(load(...))", SCRIPT)
         self.assertIn("-- @author futurewy", SCRIPT)
-        self.assertIn("-- @version 5.1.2", SCRIPT)
+        self.assertIn("-- @version 5.2.0", SCRIPT)
 
     def test_optional_file_font_falls_back(self):
         _, _, a = fixture(font_failure=True)
         self.assertEqual(a.font, a.uiFont)
+        # A missing optional font file must fall back to the base font.
+        self.assertEqual(a.fontKO, a.font)
+        self.assertEqual(a.fontBO, a.font)
 
     def test_portable_family_fallback(self):
         _, _, a = fixture(font_failure=True, family_failure=True)
@@ -179,6 +189,26 @@ class ProjectNotesZoomReaderRegression(unittest.TestCase):
         self.assertIn("not a and not sel.dragging and target", SCRIPT)
         self.assertIn("readerPasteRequested=true; sel.pending=nil", SCRIPT)
         self.assertIn("GetExtState(SECTION,'recovery_drafts')", SCRIPT)
+
+
+    def test_multi_font_runs_select_extra_fonts_by_codepoint(self):
+        _, _, a = fixture()
+        hangul = "\uac00"
+        tibetan = "\u0f40"
+        self.assertEqual(a.fontFor(hangul), a.fontKO)
+        self.assertEqual(a.fontFor(tibetan), a.fontBO)
+        self.assertIsNone(a.fontFor("a"))
+        self.assertTrue(a.isMark("\u0f71"))
+        self.assertFalse(a.isMark(hangul))
+        # ASCII keeps the previous run's font, so "a" stays on the base font
+        # and the Hangul character starts the Korean run that also takes "b".
+        runs = a.runsOf("a" + hangul + "b")
+        self.assertEqual(len(runs), 2)
+        self.assertEqual(runs[1][1], a.font)
+        self.assertEqual(runs[1][2], "a")
+        self.assertEqual(runs[2][1], a.fontKO)
+        self.assertEqual(runs[2][2], hangul + "b")
+        self.assertGreater(a.textWidth(hangul), 0)
 
 
 if __name__ == "__main__":
