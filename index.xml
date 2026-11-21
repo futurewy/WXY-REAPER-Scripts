@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="WXY REAPER Scripts" commit="37908c9267002d01cb4b72e4973e76d280af34b1">
+<index version="1" name="WXY REAPER Scripts" commit="59f79d38559ddc907b459f0fa324e03955a51487">
   <category name="Items">
     <reapack name="Move_Items_Markers_Regions_In_TimeSelection-移动所有.lua" type="script" desc="Move arrangement by bars from time selection start">
       <metadata>
@@ -70,6 +70,22 @@ No runtime behavior changes.]]></changelog>
     </reapack>
   </category>
   <category name="Tracks">
+    <reapack name="futurewy_Smart FX toggle.lua" type="script" desc="Smart toggle for the active FX or instrument window of the selected track">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 First run: opens the floating window of the first active effect on the selected track, preferring an instrument. Running it again from the same shortcut closes the open effect windows.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Uses only native REAPER actions, so no extension is required.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Closing note: TrackFX_Show(..., 0) hides the FX chain window rather than the floating window, so floating windows must be closed with 2.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.5" author="futurewy" time="2026-11-21T09:14:38Z">
+        <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/59f79d38559ddc907b459f0fa324e03955a51487/Tracks/futurewy_Smart%20FX%20toggle.lua</source>
+      </version>
+    </reapack>
     <reapack name="futurewy_Toggle instrument windows.lua" type="script" desc="Toggle instrument windows for selected tracks (parent and send lookup)">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
@@ -83,6 +99,23 @@ No runtime behavior changes.]]></changelog>
       <version name="1.0" author="futurewy" time="2026-10-29T02:55:35Z">
         <changelog><![CDATA[Initial independent implementation with native routing lookup and deduplication.]]></changelog>
         <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/8ef04249e89aefb60575d21998d2d10dd2d1402b/Tracks/futurewy_Toggle%20instrument%20windows.lua</source>
+      </version>
+    </reapack>
+    <reapack name="futurewy_Track note instrument.lua" type="script" desc="Write the instrument and preset of each selected track into its track note">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Reads the instrument of every selected track and writes a "Sound:" line into the track note. Tracks that already carry the same line are left untouched.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Uses only native REAPER actions, so no extension is required.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="futurewy" time="2026-11-21T09:14:38Z">
+        <changelog><![CDATA[v1.0: Track notes are read and written with the native
+GetSetMediaTrackInfo_String action instead of the SWS extension.]]></changelog>
+        <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/59f79d38559ddc907b459f0fa324e03955a51487/Tracks/futurewy_Track%20note%20instrument.lua</source>
       </version>
     </reapack>
     <reapack name="hide offlinefx track.lua" type="script" desc="Show selected tracks' FX and hide unselected fully offline FX tracks">
@@ -116,6 +149,49 @@ Always restore UI refresh and close the undo block after errors.]]></changelog>
       <version name="1.0" author="futurewy" time="2026-10-29T02:55:35Z">
         <changelog><![CDATA[v1.0: Initial independent native gfx calculator and tap-tempo implementation.]]></changelog>
         <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/8ef04249e89aefb60575d21998d2d10dd2d1402b/Utility/futurewy_BPM%20Calculator.lua</source>
+      </version>
+    </reapack>
+    <reapack name="futurewy_Smart region marker.lua" type="script" desc="Smart region marker: create a named and coloured Region from the time selection">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Requires REAPER with the ReaImGui extension (available through ReaPack).\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Usage:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab Select a time range in the arrange view. Without a time selection the range of the selected media item is used.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 2.\tx360\tab Click a preset button. The button shows "English (Chinese)" while only the English part is written into the Region.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 3.\tx360\tab Right click a preset button to edit or delete it, and use the add button to create a new preset.\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Notes:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Clicking a preset again at the same position renames and recolours the existing Region instead of stacking a duplicate.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Repeating sections are numbered automatically as Verse 1, Verse 2 and so on. Each preset decides on its own whether it takes part in the numbering, so Intro and Outro stay unnumbered by default.\sa180\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="futurewy" time="2026-11-21T09:14:38Z">
+        <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/59f79d38559ddc907b459f0fa324e03955a51487/Utility/futurewy_Smart%20region%20marker.lua</source>
+      </version>
+    </reapack>
+    <reapack name="futurewy_Smart track renamer.lua" type="script" desc="Smart track renamer and preset manager with a Chinese reference for every preset">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Requires REAPER with the ReaImGui extension (available through ReaPack).\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Renames the selected tracks from a preset list and stores the presets in the project state. Presets show an English name with a Chinese reference, while the written track name keeps the plain underscore form.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Features:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab The two columns can be resized by dragging the divider.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Button widths follow the length of their text.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Preset search, collapsible categories, and multi select, select all, invert and batch delete with a confirmation.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Automatic numbering for repeated names, and the next track is selected after applying a preset.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab A world instrument library window that can add its entries to the preset list in one click.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Presets can be taken from the selected track, and colours are picked with a colour picker.\sa180\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0" author="futurewy" time="2026-11-21T09:14:38Z">
+        <source main="main">https://github.com/futurewy/WXY-REAPER-Scripts/raw/59f79d38559ddc907b459f0fa324e03955a51487/Utility/futurewy_Smart%20track%20renamer.lua</source>
       </version>
     </reapack>
     <reapack name="ProjectNotes_ZoomReader.lua" type="script" desc="工程备注歌词：单Lua选字复制、连续编辑、Region跟随">
