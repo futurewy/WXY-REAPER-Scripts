@@ -20,7 +20,7 @@ from urllib.parse import urlsplit, unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 URL = 'https://raw.githubusercontent.com/futurewy/WXY-REAPER-Scripts/main/index.xml'
-EXPECTED_PACKAGES = 9
+EXPECTED_PACKAGES = 13
 
 
 def download(url):

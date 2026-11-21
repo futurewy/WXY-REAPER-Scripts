@@ -21,7 +21,7 @@ https://raw.githubusercontent.com/futurewy/WXY-REAPER-Scripts/main/index.xml
 
 | 脚本 | 版本 | 功能与限制 |
 | --- | --- | --- |
-| ProjectNotes_ZoomReader | 5.1.2 | 工程备注／歌词：居中黑底白字阅读、选字复制、连续编辑和 Region 跟随；需要 ReaImGui 0.10+。编辑后仍需保存 REAPER 工程。 |
+| ProjectNotes_ZoomReader | 5.2.0 | 工程备注／歌词：居中黑底白字阅读、选字复制、连续编辑和 Region 跟随；需要 ReaImGui 0.10+。韩文与藏文按字符自动选择字体，缺少字体文件时回退到基础字体。编辑后仍需保存 REAPER 工程。 |
 | futurewy_BPM Calculator | 1.0 | 独立 BPM 计算器，拍数/时长换算与点击打拍；原生 gfx，无 FX、SWS 或 ReaImGui 依赖，不自动改变工程速度。 |
 | futurewy_Toggle instrument windows | 1.0 | 切换选中轨道对应乐器的浮动窗口；查找本轨、父轨和发送目标，共享乐器去重，路由循环安全；无 SWS 依赖。 |
 | hide offlinefx track | 1.1 | 选中且有 FX 的轨道恢复在线并显示；隐藏未选中且全部 FX 离线的轨道。 |
@@ -30,13 +30,17 @@ https://raw.githubusercontent.com/futurewy/WXY-REAPER-Scripts/main/index.xml
 | MIDI Notation Sanitizer | 2.2.1 | MIDI 记谱清理；会归一化力度、移除部分控制事件，请先备份。原生 gfx 界面，无扩展依赖。 |
 | RevoiceSelectedChord | 4.0.1 | MIDI 编辑器内选中音符的和弦替换；原生 gfx 界面，无扩展依赖。 |
 | URL Bookmarks Manager | 2.1 | 网址书签菜单；安全打开链接需要 SWS 的 CF_ShellExecute。不再使用拼接 shell 命令的回退方式。 |
+| futurewy_Smart region marker | 1.0 | 智能区域标记：框选时间选区后点一下段落名即可创建带名称和颜色的 Region；同一位置再次点击会直接改名改色。需要 ReaImGui。 |
+| futurewy_Smart track renamer | 1.0 | 智能轨道重命名与预设管理器：预设带中文对照，写入轨道自动转为纯英文下划线规范版；支持搜索、分类折叠、多选批量操作和自动编号。需要 ReaImGui。 |
+| futurewy_Smart FX toggle | 1.5 | 切换选中轨道首个活跃效果器（优先音源）的浮动窗口，再按一次关闭；只用原生 REAPER API，无扩展依赖。 |
+| futurewy_Track note instrument | 1.0 | 批量把选中轨道的插件与音色信息写入轨道备注，已存在相同内容时不重复写入；只用原生 REAPER API，无扩展依赖。 |
 
 和声生成器保留原有音乐算法：斜杠低音目前未强制应用到试听配器；部分变化和弦五音处理、无可行配音时的回退仍需音乐性复核。
 
 ## 安全试用
 
 这批版本经过 Lua 5.3 语法检查及模拟 REAPER API 回归测试，**不等于已在真实 REAPER 中完成兼容性认证**。请在工程副本中逐项验证，参见 [人工测试清单](TESTING.md)。
-未分发或改动两个含第三方版权署名的原始脚本。新增的 futurewy_BPM Calculator 和 futurewy_Toggle instrument windows 是按功能需求独立实现的新脚本，非原文件的改名版本。BPM 新版不再调用原来的同名 FX；两个新版不会自动替换原脚本快捷键或工具栏绑定，请安装后重新绑定。
+未分发或改动两个含第三方版权署名的原始脚本。futurewy_Track note instrument 以原生 GetSetMediaTrackInfo_String 读写轨道备注，不再依赖 SWS 扩展。新增的 futurewy_BPM Calculator 和 futurewy_Toggle instrument windows 是按功能需求独立实现的新脚本，非原文件的改名版本。BPM 新版不再调用原来的同名 FX；两个新版不会自动替换原脚本快捷键或工具栏绑定，请安装后重新绑定。
 
 新版工程备注阅读器单独运行，不依赖 Legacy 脚本；Legacy 为旧版备份，不分发，避免共享状态互相覆盖。阅读器字体有回退，但中文显示取决于本机字体。恢复数据采用十六进制编码而非加密；不代替工程备份，崩溃或强制退出也不保证恢复。
 
